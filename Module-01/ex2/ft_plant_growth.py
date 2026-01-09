@@ -15,27 +15,18 @@ class Plant:
 
 
 if __name__ == "__main__":
-    p1 = Plant("Rose", 25, 30)
-    p2 = Plant("Sunflower", 80, 45)
+    p = Plant("Rose", 25, 30)
 
-    start1 = p1.height_cm
-    start2 = p2.height_cm
+    start = p.height_cm
 
     print("=== Day 1 ===")
-    p1.show()
-    p2.show()
+    p.show_info()
 
-    i = 0
-    while i < 6:
-        p1.grow(1)
-        p1.age(1)
-        p2.grow(2)
-        p2.age(1)
-        i += 1
+    for i in range(6):
+        p.grow(1)
+        p.age(1)
 
     print("=== Day 7 ===")
-    p1.show()
-    p2.show()
+    p.show_info()
 
-    print("Growth this week: +", p1.height_cm - start1, "cm")
-    print("Growth this week: +", p2.height_cm - start2, "cm")
+    print("Growth this week: +", p.height_cm - start, "cm")
