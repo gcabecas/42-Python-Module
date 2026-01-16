@@ -1,34 +1,28 @@
 class Plant:
-    def __init__(self, name, height_cm, age_days):
+    """Represents a plant created from factory specifications."""
+
+    def __init__(self, name: str, height: int, days: int) -> None:
+        """Initialize a plant with its name, height, and age in days."""
         self.name = name
-        self.height_cm = height_cm
-        self.age_days = age_days
-
-    def grow(self, cm):
-        self.height_cm = self.height_cm + cm
-
-    def age(self, days):
-        self.age_days = self.age_days + days
-
-    def show_info(self):
-        print(self.name, ":", self.height_cm, "cm,", self.age_days, "days old")
+        self.height = height
+        self.days = days
 
 
 if __name__ == "__main__":
-    plants = [
-        Plant("Rose", 25, 30),
-        Plant("Oak", 200, 365),
-        Plant("Cactus", 5, 90),
-        Plant("Sunflower", 80, 45),
-        Plant("Fern", 15, 120),
-    ]
-
+    """Entry point of the program."""
     print("=== Plant Factory Output ===")
 
-    count = 0
-    for plant in plants:
-        print("Created:", plant.name, "(", plant.height_cm, "cm,",
-              plant.age_days, "days", ")")
-        count += 1
+    specs = [
+        ("Rose", 25, 30),
+        ("Oak", 200, 365),
+        ("Cactus", 5, 90),
+        ("Sunflower", 80, 45),
+        ("Fern", 15, 120),
+    ]
 
-    print("Total plants created:", count)
+    plants = []
+    for i in range(5):
+        name, height, days = specs[i]
+        p = Plant(name, height, days)
+        plants.append(p)
+        print(f"Created: {p.name} ({p.height}cm, {p.days} days)")

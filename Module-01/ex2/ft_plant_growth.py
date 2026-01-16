@@ -1,32 +1,39 @@
 class Plant:
-    def __init__(self, name, height_cm, age_days):
+    """Represents a plant that can grow and age over time."""
+
+    def __init__(self, name: str, height: int, days: int) -> None:
+        """Initialize a plant with a name, height (cm), and age in days."""
         self.name = name
-        self.height_cm = height_cm
-        self.age_days = age_days
+        self.height = height
+        self.days = days
 
-    def grow(self, cm):
-        self.height_cm = self.height_cm + cm
+    def grow(self, cm: int) -> None:
+        """Increase the plant height by `cm`."""
+        self.height = self.height + cm
 
-    def age(self, days):
-        self.age_days = self.age_days + days
+    def age(self, add_days: int) -> None:
+        """Increase the plant age by `add_days`."""
+        self.days = self.days + add_days
 
-    def show_info(self):
-        print(self.name, ":", self.height_cm, "cm,", self.age_days, "days old")
+    def get_info(self) -> None:
+        """Print the plant information in the required format."""
+        print(f"{self.name}: {self.height}cm, {self.days} days old")
 
 
 if __name__ == "__main__":
-    p = Plant("Rose", 25, 30)
-
-    start = p.height_cm
+    """Entry point of the program."""
+    rose = Plant("Rose", 25, 30)
+    start_height = rose.height
 
     print("=== Day 1 ===")
-    p.show_info()
+    rose.get_info()
 
-    for i in range(6):
-        p.grow(1)
-        p.age(1)
+    for _ in range(6):
+        rose.grow(1)
+        rose.age(1)
 
     print("=== Day 7 ===")
-    p.show_info()
+    rose.get_info()
 
-    print("Growth this week: +", p.height_cm - start, "cm")
+    growth = rose.height - start_height
+    print(f"Growth this week: +{growth}cm")
