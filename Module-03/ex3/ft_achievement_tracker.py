@@ -13,7 +13,11 @@ def achivements() -> None:
     print("\n=== Achievement Analytics ===\n")
 
     print(f"Common to all players: {alice & bob & charlie}")
-    print(f"Rare achievements (1 player): {alice - bob - charlie}\n")
+    print(f"Rare achievements (1 player): "
+          {(alice - bob - charlie)
+           - (bob - charlie - alice)
+           - (charlie - alice - bob)}
+          f"\n")
 
     print(f"Alice vs Bob common: {alice & bob}")
     print(f"Alice unique: {alice.difference(bob)}")
