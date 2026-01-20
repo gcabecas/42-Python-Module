@@ -34,7 +34,7 @@ class GardenManager:
     def add_plant(self, name: str, water_level: int = 5,
                   sunlight_hours: int = 8) -> None:
         """Add plant to garden."""
-        if not name or name.strip() == "":
+        if not name:
             raise PlantError("Plant name cannot be empty!")
 
         plant = Plant(name, water_level, sunlight_hours)

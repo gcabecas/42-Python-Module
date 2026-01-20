@@ -1,7 +1,7 @@
 def check_plant_health(plant_name: str, water_level: int,
                        sunlight_hours: int) -> str:
     """Check plant conditions."""
-    if not plant_name or plant_name.strip() == "":
+    if not plant_name:
         raise ValueError("Plant name cannot be empty!")
 
     if water_level < 1:
