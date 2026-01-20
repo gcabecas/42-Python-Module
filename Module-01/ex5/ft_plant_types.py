@@ -58,7 +58,7 @@ class Vegetable(Plant):
 
 
 if __name__ == "__main__":
-    """Entry point of the program."""
+    """Entry point of the program, do the example."""
     print("=== Garden Plant Types ===")
 
     rose = Flower("Rose", 25, 30, "red")

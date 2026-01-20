@@ -36,7 +36,7 @@ class SecurePlant:
 
 
 if __name__ == "__main__":
-    """Entry point of the program."""
+    """Entry point of the program, do the example."""
     print("=== Garden Security System ===")
     plant = SecurePlant("Rose")
     print(f"Plant created: {plant.name}")
@@ -50,4 +50,4 @@ if __name__ == "__main__":
         f"Current plant: {
             plant.name} ({
             plant.get_height()}cm, {
-                plant.get_age()} days)")
+            plant.get_age()} days)")
