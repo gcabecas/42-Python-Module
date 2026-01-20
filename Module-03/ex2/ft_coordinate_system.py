@@ -3,7 +3,7 @@ import math
 
 
 def calc() -> None:
-    print("=== Game Coordinate System ===")
+    print("=== Game Coordinate System ===\n")
     argc: int = len(sys.argv)
     if argc != 2:
         print("wrong number of args")
