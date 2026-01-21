@@ -1,24 +1,33 @@
 import sys
+import math
+
+
+def calc() -> None:
+    print("=== Game Coordinate System ===\n")
+    argc: int = len(sys.argv)
+    if argc != 2:
+        print("wrong number of args")
+        return
+
+    cords: list[str] = sys.argv[1].split(",")
+    if len(cords) != 3:
+        print("Error: Wrong number of cords")
+        return
+
+    (x, y, z) = cords
+    try:
+        dist = math.sqrt((0 - int(x))**2 + (0 - int(y))**2 + (0 - int(z))**2)
+    except ValueError as err:
+        print(f"Error: {err}")
+        return
+
+    print(
+        f"Distance between (0, 0, 0) and ("
+        f"{x}, "
+        f"{y}, "
+        f"{z}): {dist:.2f}"
+    )
+
 
 if __name__ == "__main__":
-    print("=== Player Score Analytics ===")
-    argc: int = len(sys.argv)
-    args: list = []
-    if argc == 1:
-        print(
-            "No scores provided. Usage: python3 ft_score_analytics.py"
-            " <score1> <score2> ...")
-    else:
-        print("Scores processed: [", end="")
-        for i in range(1, argc):
-            args.append(int(sys.argv[i]))
-            print(f"{sys.argv[i]}", end="")
-            if i != argc - 1:
-                print(", ", end="")
-        print("]")
-        print(f"Total players: {argc - 1}")
-        print(f"Total score: {sum(args)}")
-        print(f"Average score: {sum(args) / (argc - 1)}")
-        print(f"High score: {max(args)}")
-        print(f"Low score: {min(args)}")
-        print(f"Score range: {max(args) - min(args)}")
+    calc()
