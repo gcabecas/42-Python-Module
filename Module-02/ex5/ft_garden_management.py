@@ -101,7 +101,7 @@ def test_garden_management() -> None:
         print(f"Error adding plant: {e}")
 
     try:
-        garden.add_plant("", 5, 8)
+        garden.add_plant(10, 5, 8)
     except PlantError as e:
         print(f"Error adding plant: {e}")
 

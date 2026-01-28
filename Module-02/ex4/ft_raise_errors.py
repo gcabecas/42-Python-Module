@@ -31,7 +31,7 @@ def test_plant_checks() -> None:
 
     print("\nTesting empty plant name...")
     try:
-        result = check_plant_health("", 5, 8)
+        result = check_plant_health(10, 5, 8)
         print(result)
     except ValueError as e:
         print(f"Error: {e}")
