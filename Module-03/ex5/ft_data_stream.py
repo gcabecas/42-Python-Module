@@ -408,7 +408,6 @@ def main():
         if i < 3:
             print(f"Event {i + 1}:Player {player} (level {level}) {event}")
             i += 1
-        pass
     print("...\n")
 
     print("=== Stream Analytics ===")
