@@ -61,7 +61,8 @@ def combined_analysis(players, achievements):
     top_score = max(totals) if len(totals) > 0 else 0
     top_names = [n for n in names if players[n]["total_score"] == top_score]
     top_name = sorted(top_names)[0] if len(top_names) > 0 else "none"
-    top_ach = players[top_name]["achievements_count"] if top_name in players else 0
+    top_ach = (players[top_name]["achievements_count"]
+               if top_name in players else 0)
 
     print(f"Total players: {total_players}")
     print(f"Total unique achievements: {total_unique_achievements}")

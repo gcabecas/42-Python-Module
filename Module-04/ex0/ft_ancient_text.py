@@ -12,5 +12,6 @@ def main():
     except FileNotFoundError:
         print("ERROR: Storage vault not found.")
 
+
 if __name__ == "__main__":
     main()
