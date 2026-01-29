@@ -1,7 +1,7 @@
 import sys
 
 
-if __name__ == "__main__":
+def main() -> None:
     print("=== Player Score Analytics ===")
     argc: int = len(sys.argv)
     args: list[int] = []
@@ -19,22 +19,26 @@ if __name__ == "__main__":
             except ValueError:
                 print("]")
                 print(f"Error: Invalid score '{sys.argv[i]}'")
-                sys.exit(0)
+                return
             args.append(score)
 
             print(f"{score}", end="")
             if i != argc - 1:
                 print(", ", end="")
-        print("]")
+            print("]")
 
-        total_players: int = argc - 1
-        total_score: int = sum(args)
-        high_score: int = max(args)
-        low_score: int = min(args)
+            total_players: int = argc - 1
+            total_score: int = sum(args)
+            high_score: int = max(args)
+            low_score: int = min(args)
 
-        print(f"Total players: {total_players}")
-        print(f"Total score: {total_score}")
-        print(f"Average score: {total_score / total_players}")
-        print(f"High score: {high_score}")
-        print(f"Low score: {low_score}")
-        print(f"Score range: {high_score - low_score}")
+            print(f"Total players: {total_players}")
+            print(f"Total score: {total_score}")
+            print(f"Average score: {total_score / total_players}")
+            print(f"High score: {high_score}")
+            print(f"Low score: {low_score}")
+            print(f"Score range: {high_score - low_score}")
+
+
+if __name__ == "__main__":
+    main()
