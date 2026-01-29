@@ -382,6 +382,8 @@ def StreamProcessor():
     level = 0
     eventname = ""
 
+    print(f"Processing {len(events)} game events...\n")
+
     for event in events:
         Num += 1
         level = event['data']['level']
