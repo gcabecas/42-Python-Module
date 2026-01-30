@@ -1,12 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-# log c'est quoi l'input ???
-
 
 class DataProcessor(ABC):
     @abstractmethod
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @abstractmethod
@@ -18,11 +16,11 @@ class DataProcessor(ABC):
         pass
 
     def format_output(self, result: str) -> str:
-        print(f"Output: {result}\n")
+        return f"Output: {result}\n"
 
 
 class NumericProcessor(DataProcessor):
-    def __init__(self):
+    def __init__(self) -> None:
         print("Initializing Numeric Processor...")
 
     def validate(self, data: Any) -> bool:
@@ -43,7 +41,7 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-    def __init__(self):
+    def __init__(self) -> None:
         print("Initializing Text Processor...")
 
     def validate(self, data: Any) -> bool:
@@ -53,7 +51,7 @@ class TextProcessor(DataProcessor):
         return False
 
     def process(self, data: Any) -> str:
-        print(f"Processing data: {data}")
+        print(f"Processing data: \"{data}\"")
         if not self.validate(data):
             raise ValueError(
                 "Invalid data: Data must be a strings.")
@@ -61,20 +59,59 @@ class TextProcessor(DataProcessor):
             f"words={len(data.split())}"
 
 
-def main():
+class LogProcessor(DataProcessor):
+    def __init__(self) -> None:
+        print("Initializing Log Processor...")
+
+    def validate(self, data: Any) -> bool:
+        if type(data) is not str:
+            return False
+
+        parts = data.split(":")
+        if len(parts) != 2:
+            return False
+
+        level = parts[0].strip()
+        message = parts[1].strip()
+        if level == "" or message == "":
+            return False
+        print("Validation: Log data verified")
+        return True
+
+    def process(self, data: Any) -> str:
+        print(f"Processing data: \"{data}\"")
+        if not self.validate(data):
+            raise ValueError(
+                "Invalid data: Data must be a log string in format"
+                " 'LEVEL: message'.")
+        parts = data.split(":")
+        level = parts[0].strip()
+        message = parts[1].strip()
+
+        return f"[{level}] {level} level detected: {message}"
+
+
+def main() -> None:
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
     try:
         NumProc = NumericProcessor()
-        NumProc.format_output(NumProc.process([1, 2, 3, 4, 5]))
-    except ValueError as e:
-        NumProc.format_output(e)
+        print(NumProc.format_output(NumProc.process([1, 2, 3, 4, 5])))
+    except Exception as e:
+        print(NumProc.format_output(e))
 
     try:
         TextProc = TextProcessor()
-        TextProc.format_output(
-            TextProc.process("Hello Nexus World"))
-    except ValueError as e:
-        TextProc.format_output(e)
+        print(TextProc.format_output(
+            TextProc.process("Hello Nexus World")))
+    except Exception as e:
+        print(TextProc.format_output(e))
+
+    try:
+        LogProc = LogProcessor()
+        print(LogProc.format_output(
+            LogProc.process("ERROR: Connection timeout")))
+    except Exception as e:
+        print(LogProc.format_output(e))
 
 
 if __name__ == "__main__":
