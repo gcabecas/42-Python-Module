@@ -85,8 +85,8 @@ class LogProcessor(DataProcessor):
                 "Invalid data: Data must be a log string in format"
                 " 'LEVEL: message'.")
         parts = data.split(":")
-        level = parts[0].strip()
-        message = parts[1].strip()
+        level = parts[0]
+        message = parts[1]
 
         return f"[{level}] {level} level detected: {message}"
 
