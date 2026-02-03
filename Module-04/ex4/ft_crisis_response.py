@@ -2,10 +2,8 @@ def crisisHandler(file: str) -> None:
     print(f"CRISIS ALERT: Attempting access to '{file}'...")
     try:
         with open(file, 'r') as f:
-            for line in f:
-                print(line, end='')
-            print("SUCCESS: Archive recovered - "
-                  "Knowledge preserved for humanity''")
+            print(f"SUCCESS: Archive recovered - "
+                  f"{f.read()}")
             print("STATUS: Normal operations resumed\n")
     except FileNotFoundError:
         print("RESPONSE: Archive not found in storage matrix")
