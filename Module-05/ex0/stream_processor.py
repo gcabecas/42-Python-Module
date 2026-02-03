@@ -4,10 +4,6 @@ from typing import Any
 
 class DataProcessor(ABC):
     @abstractmethod
-    def __init__(self) -> None:
-        pass
-
-    @abstractmethod
     def validate(self, data: Any) -> bool:
         pass
 
