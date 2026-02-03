@@ -5,12 +5,13 @@ def main():
         file = open("ancient_fragment.txt", "r")
         print("Connection established...\n")
         print("RECOVERED DATA:")
-        for line in file:
-            print(line, end="")
+        print(file.read())
         file.close()
-        print("\n\nData recovery complete. Storage unit disconnected.")
+        print("\nData recovery complete. Storage unit disconnected.")
     except FileNotFoundError:
         print("ERROR: Storage vault not found.")
+    except OSError as e:
+        print(f"ERROR: {e}")
 
 
 if __name__ == "__main__":

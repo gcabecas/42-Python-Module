@@ -13,7 +13,7 @@ def crisisHandler(file: str) -> None:
     except PermissionError:
         print("RESPONSE: Security protocols deny access")
         print("STATUS: Crisis handled, security maintained\n")
-    except Exception as e:
+    except OSError as e:
         print(f"An unexpected error occurred: {e}\n")
 
 

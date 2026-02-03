@@ -3,7 +3,7 @@ def main():
 
     try:
         print("Initializing new storage unit: new_discovery.txt")
-        file = open("new_discovery.txt", "x")
+        file = open("new_discovery.txt", "w")
         print("Storage unit created successfully...\n")
 
         print("Inscribing preservation data...")
@@ -15,7 +15,7 @@ def main():
         file.close()
         print("Data inscription complete. Storage unit sealed.")
         print("Archive 'new_discovery.txt' ready for long-term preservation.")
-    except FileExistsError as e:
+    except OSError as e:
         print(f"ERROR: {e}")
         return
 
