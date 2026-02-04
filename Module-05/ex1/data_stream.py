@@ -50,8 +50,8 @@ class SensorStream(DataStream):
                 temp_value = float(data.split(":")[1])
                 temp_sum += temp_value
                 temp_count += 1
-            except (IndexError, ValueError) as e:
-                return f"Error processing data '{data}': {e}"
+            except (Exception):
+                pass
 
         avg_temp = temp_sum / temp_count if temp_count > 0 else None
         if avg_temp is not None:
