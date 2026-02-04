@@ -3,7 +3,7 @@ def crisisHandler(file: str) -> None:
     try:
         with open(file, 'r') as f:
             print(f"SUCCESS: Archive recovered - "
-                  f"{f.read()}")
+                  f"\'{f.read()}\'")
             print("STATUS: Normal operations resumed\n")
     except FileNotFoundError:
         print("RESPONSE: Archive not found in storage matrix")
