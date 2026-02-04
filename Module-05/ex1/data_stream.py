@@ -97,6 +97,25 @@ class TransactionStream(DataStream):
         return self.stat
 
 
+class EventStream(DataStream):
+    def __init__(self, stream_id: str) -> None:
+        super().__init__(stream_id, "Event Data")
+        print("Initializing Event Stream...")
+        print(f"Stream ID: {self.stream_id}, Type: {self.stream_type}")
+
+    def process_batch(self, data_batch: List[Any]) -> str:
+        print(f"Processing event batch: {data_batch}")
+
+        self.data_processed += len(data_batch)
+
+        error = self.filter_data(data_batch, criteria="error")
+        if len(error) > 1:
+            self.stat = f"{len(error)} errors found"
+        else:
+            self.stat = f"{len(error)} error found"
+        return self.stat
+
+
 def main() -> None:
     sensor_stream = SensorStream("SENSOR_001")
     sensor_batch = ["temp:22.5", "humidity:65", "pressure:1013"]
@@ -113,6 +132,17 @@ def main() -> None:
     stats = transaction_stream.get_stats()
     print(f"Transaction analysis: {stats['data_processed']}"
           f" operations, {stats['stat']}")
+
+    print()
+
+    event_stream = EventStream("EVENT_001")
+    event_batch = ["login", "error", "logout"]
+    event_stream.process_batch(event_batch)
+    stats = event_stream.get_stats()
+    print(f"Event analysis: {stats['data_processed']} events processed,"
+          f" {stats['stat']}")
+
+    print("\n=== Polymorphic Stream Processing ===")
 
 
 if __name__ == "__main__":
