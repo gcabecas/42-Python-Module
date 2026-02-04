@@ -18,7 +18,9 @@ class DataStream(ABC):
                     = None) -> List[Any]:
         if criteria is None:
             return data_batch
-        return [data for data in data_batch if criteria in str(data)]
+        return [
+            data for data in data_batch if criteria and isinstance(
+                data, str) and criteria in data]
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {
