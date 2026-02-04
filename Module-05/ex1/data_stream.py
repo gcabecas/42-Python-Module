@@ -118,6 +118,18 @@ class EventStream(DataStream):
         return self.stat
 
 
+class StreamProcessor:
+    def process_stream(
+            self,
+            stream: DataStream,
+            data_batch: List[Any]) -> None:
+
+        try:
+            stream.process_batch(data_batch)
+        except Exception as e:
+            print(f"Error processing stream {stream.stream_id}: {e}")
+
+
 def main() -> None:
     sensor_stream = SensorStream("SENSOR_001")
     sensor_batch = ["temp:22.5", "humidity:65", "pressure:1013"]
@@ -145,6 +157,34 @@ def main() -> None:
           f" {stats['stat']}")
 
     print("\n=== Polymorphic Stream Processing ===")
+    print("Processing mixed stream types through unified interface...\n")
+
+    processor = StreamProcessor()
+    streams = [
+        (sensor_stream, ["temp:40.5", "temp:38.2"]),
+        (transaction_stream, ["buy:5000", "sell:100", "buy:2000", "sell:500"]),
+        (event_stream, event_batch)
+    ]
+
+    print("Batch 1 Results:")
+    for stream, batch in streams:
+        processor.process_stream(stream, batch)
+        if isinstance(stream, SensorStream):
+            print(f"- Sensor data: {len(batch)} readings processed")
+        elif isinstance(stream, TransactionStream):
+            print(f"- Transaction data: {len(batch)} operations processed")
+        elif isinstance(stream, EventStream):
+            print(f"- Event data: {len(batch)} events processed")
+
+    print("\nStream filtering active: High-priority data only")
+    high_priority_sensor = sensor_stream.filter_data(
+        ["error", "info", "error"], "error")
+    high_priority_trans = transaction_stream.filter_data(
+        ["buy:100000", "sell:50", "buy:500"], "000")
+
+    print(f"Filtered results: {len(high_priority_sensor)} critical "
+          f"sensor alerts, {len(high_priority_trans)} large transactions")
+    print("All streams processed successfully. Nexus throughput optimal.")
 
 
 if __name__ == "__main__":
