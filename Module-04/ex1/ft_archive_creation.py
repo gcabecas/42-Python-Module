@@ -1,4 +1,4 @@
-def main():
+def main() -> None:
     print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===\n")
 
     try:
