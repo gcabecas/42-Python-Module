@@ -20,6 +20,9 @@ class NumericProcessor(DataProcessor):
         print("Initializing Numeric Processor...")
 
     def validate(self, data: Any) -> bool:
+        if type(data) in (int, float):
+            print("Validation: Numeric data verified")
+            return True
         if type(data) in (list, tuple):
             if all(type(item) in (int, float) for item in data):
                 print("Validation: Numeric data verified")
@@ -30,7 +33,12 @@ class NumericProcessor(DataProcessor):
         print(f"Processing data: {data}")
         if not self.validate(data):
             raise ValueError(
-                "Invalid data: Data must be a list or tuple of numbers.")
+                "Invalid data: Data must be a number,"
+                " list or tuple of numbers.")
+
+        if type(data) in (int, float):
+            data = [data]
+
         total = sum(data)
         avg = total / len(data)
         return f"Processed {len(data)} numeric values, sum={total}, avg={avg}"
@@ -67,8 +75,8 @@ class LogProcessor(DataProcessor):
         if len(parts) != 2:
             return False
 
-        level = parts[0].strip()
-        message = parts[1].strip()
+        level = parts[0]
+        message = parts[1]
         if level == "" or message == "":
             return False
         print("Validation: Log data verified")
@@ -83,8 +91,9 @@ class LogProcessor(DataProcessor):
         parts = data.split(":")
         level = parts[0]
         message = parts[1]
-
-        return f"[{level}] {level} level detected: {message}"
+        if ("ERROR" in level):
+            return f"[ALERT]{level} level detected: {message}"
+        return f"[{level}]{level} level detected: {message}"
 
 
 def main() -> None:
@@ -108,6 +117,23 @@ def main() -> None:
             LogProc.process("ERROR: Connection timeout")))
     except Exception as e:
         print(LogProc.format_output(e))
+
+    print("\n=== Polymorphic Processing Demo ===")
+    print("Processing multiple data types through same interface...")
+
+    demo_scenarios = [
+        (NumericProcessor(), [1, 2, 3]),
+        (TextProcessor(), "Hello Python"),
+        (LogProcessor(), "INFO: System ready")
+    ]
+    i = 1
+    for processor, data in demo_scenarios:
+        try:
+            result = processor.process(data)
+            print(f"Result {i}: {result}")
+        except Exception as e:
+            print(f"Result {i}: Error - {e}")
+        i += 1
 
 
 if __name__ == "__main__":
