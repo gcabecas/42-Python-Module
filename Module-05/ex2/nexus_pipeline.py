@@ -17,16 +17,14 @@ class TransformStage:
     def process(self, data: Any) -> Any:
         if isinstance(data, dict):
             print("Transform: Enriched with metadata and validation")
-            return f"Processed temperature reading: {
-                data.get('value')} {
-                data.get('unit')} (Normal range)\n"
+            return f"Processed temperature reading: {data.get('value')} " \
+                f"{data.get('unit')}\n"
         elif isinstance(data, list) and \
                 all(isinstance(x, (int, float)) for x in data):
             print("Transform: Aggregated and filtered")
             avg = sum(data) / len(data)
-            return f"Stream summary: {
-                len(data)} readings, avg: {
-                    avg:.1f}°C\n"
+            return f"Stream summary: {len(data)} " \
+                f"readings, avg: {avg:.1f}°C\n"
         elif isinstance(data, str):
             print("Transform: Parsed and structured data")
             parts = data.split(",")
