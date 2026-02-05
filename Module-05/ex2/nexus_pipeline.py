@@ -27,6 +27,14 @@ class TransformStage:
             return f"Stream summary: {
                 len(data)} readings, avg: {
                     avg:.1f}°C\n"
+        elif isinstance(data, str):
+            print("Transform: Parsed and structured data")
+            parts = data.split(",")
+            i = 0
+            for part in parts:
+                if part == "action":
+                    i += 1
+            return f"User activity logged: {i} actions processed\n"
 
 
 class OutputStage:
@@ -60,7 +68,7 @@ class JSONAdapter(ProcessingPipeline):
 
     def process(self, data: Any) -> Union[str, Any]:
         if not isinstance(data, dict):
-            print("Error: JSONAdapter expects a dict")
+            print("Error: JSONAdapter expects a dict\n")
             return
         print("Processing JSON data through pipeline...")
         return self._run_stages(data)
@@ -71,7 +79,11 @@ class CSVAdapter(ProcessingPipeline):
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
-        pass
+        if not isinstance(data, str):
+            print("Error: CSVAdapter expects a string\n")
+            return
+        print("Processing CSV data through pipeline...")
+        return self._run_stages(data)
 
 
 class StreamAdapter(ProcessingPipeline):
@@ -81,9 +93,9 @@ class StreamAdapter(ProcessingPipeline):
     def process(self, data: Any) -> Union[str, Any]:
         if not isinstance(data, list) or \
                 not all(isinstance(x, (int, float)) for x in data):
-            print("Error: StreamAdapter expects a list of numbers")
+            print("Error: StreamAdapter expects a list of numbers\n")
             return
-        print("Processing Stream data through same pipeline...")
+        print("Processing Stream data through pipeline...")
         return self._run_stages(data)
 
 
@@ -128,7 +140,7 @@ def main():
     manager.process_data(
         "pipe_json", {
             "sensor": "temp", "value": 23.5, "unit": "C"})
-    # manager.process_data("pipe_csv", "user,action,timestamp")
+    manager.process_data("pipe_csv", "user,action,timestamp")
     manager.process_data("pipe_stream", [20, 15.2, 19.2, 17.7, 28.4])
 
 
