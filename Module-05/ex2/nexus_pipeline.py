@@ -44,14 +44,14 @@ class OutputStage:
 
 
 class ProcessingPipeline(ABC):
-    def __init__(self, pipeline_id: str):
+    def __init__(self, pipeline_id: str) -> None:
         self.stages: List[ProcessingStage] = []
         self.pipeline_id = pipeline_id
 
     def add_stage(self, stage: ProcessingStage) -> None:
         self.stages.append(stage)
 
-    def _run_stages(self, data: Any) -> Any:
+    def run_stages(self, data: Any) -> Any:
         res = data
         for stage in self.stages:
             res = stage.process(res)
@@ -63,40 +63,40 @@ class ProcessingPipeline(ABC):
 
 
 class JSONAdapter(ProcessingPipeline):
-    def __init__(self, pipeline_id):
+    def __init__(self, pipeline_id: str) -> None:
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
         if not isinstance(data, dict):
             print("Error: JSONAdapter expects a dict\n")
-            return
+            return data
         print("Processing JSON data through pipeline...")
-        return self._run_stages(data)
+        return self.run_stages(data)
 
 
 class CSVAdapter(ProcessingPipeline):
-    def __init__(self, pipeline_id):
+    def __init__(self, pipeline_id: str) -> None:
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
         if not isinstance(data, str):
             print("Error: CSVAdapter expects a string\n")
-            return
+            return data
         print("Processing CSV data through pipeline...")
-        return self._run_stages(data)
+        return self.run_stages(data)
 
 
 class StreamAdapter(ProcessingPipeline):
-    def __init__(self, pipeline_id):
+    def __init__(self, pipeline_id: str) -> None:
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
         if not isinstance(data, list) or \
                 not all(isinstance(x, (int, float)) for x in data):
             print("Error: StreamAdapter expects a list of numbers\n")
-            return
+            return data
         print("Processing Stream data through pipeline...")
-        return self._run_stages(data)
+        return self.run_stages(data)
 
 
 class NexusManager:
@@ -115,7 +115,7 @@ class NexusManager:
         return results
 
 
-def main():
+def main() -> None:
     print("=== CODE NEXUS - ENTERPRISE PIPELINE SYSTEM ===\n")
     manager = NexusManager()
 

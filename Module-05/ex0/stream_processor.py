@@ -102,21 +102,21 @@ def main() -> None:
         NumProc = NumericProcessor()
         print(NumProc.format_output(NumProc.process([1, 2, 3, 4, 5])))
     except Exception as e:
-        print(NumProc.format_output(e))
+        print(NumProc.format_output(str(e)))
 
     try:
         TextProc = TextProcessor()
         print(TextProc.format_output(
             TextProc.process("Hello Nexus World")))
     except Exception as e:
-        print(TextProc.format_output(e))
+        print(TextProc.format_output(str(e)))
 
     try:
         LogProc = LogProcessor()
         print(LogProc.format_output(
             LogProc.process("ERROR: Connection timeout")))
     except Exception as e:
-        print(LogProc.format_output(e))
+        print(LogProc.format_output(str(e)))
 
     print("\n=== Polymorphic Processing Demo ===")
     print("Processing multiple data types through same interface...")
