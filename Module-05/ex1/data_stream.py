@@ -60,6 +60,9 @@ class SensorStream(DataStream):
             self.stat = f"avg temp: {avg_temp:.1f}°C"
         else:
             self.stat = "No temperature data found."
+
+        if avg_temp is not None and avg_temp > 30.0:
+            self.stat += "[ALERT: High Temperature]"
         return self.stat
 
 
