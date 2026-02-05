@@ -17,26 +17,21 @@ class TransformStage:
     def process(self, data: Any) -> Any:
         if isinstance(data, dict):
             print("Transform: Enriched with metadata and validation")
+            return f"Processed temperature reading: {
+                data.get('value')} {
+                data.get('unit')} (Normal range)\n"
         elif isinstance(data, list) and \
                 all(isinstance(x, (int, float)) for x in data):
             print("Transform: Aggregated and filtered")
-        return data
+            avg = sum(data) / len(data)
+            return f"Stream summary: {
+                len(data)} readings, avg: {
+                    avg:.1f}°C\n"
 
 
 class OutputStage:
     def process(self, data: Any) -> Any:
-        if isinstance(data, dict):
-            print(
-                f"Output: Processed temperature reading: {
-                    data.get('value')} {
-                    data.get('unit')} (Normal range)\n")
-        elif isinstance(data, list) and \
-                all(isinstance(x, (int, float)) for x in data):
-            avg = sum(data) / len(data)
-            print(
-                f"Output: Stream summary: {
-                    len(data)} readings, avg: {
-                    avg:.1f}°C\n")
+        print(f"Output: {data}")
         return data
 
 
@@ -65,7 +60,8 @@ class JSONAdapter(ProcessingPipeline):
 
     def process(self, data: Any) -> Union[str, Any]:
         if not isinstance(data, dict):
-            return "Error: JSONAdapter expects a dict"
+            print("Error: JSONAdapter expects a dict")
+            return
         print("Processing JSON data through pipeline...")
         return self._run_stages(data)
 
@@ -83,6 +79,10 @@ class StreamAdapter(ProcessingPipeline):
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
+        if not isinstance(data, list) or \
+                not all(isinstance(x, (int, float)) for x in data):
+            print("Error: StreamAdapter expects a list of numbers")
+            return
         print("Processing Stream data through same pipeline...")
         return self._run_stages(data)
 
