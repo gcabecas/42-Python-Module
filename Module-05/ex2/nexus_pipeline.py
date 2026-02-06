@@ -17,14 +17,17 @@ class TransformStage:
     def process(self, data: Any) -> Any:
         if isinstance(data, dict):
             print("Transform: Enriched with metadata and validation")
-            return f"Processed temperature reading: {data.get('value')} " \
-                f"{data.get('unit')}\n"
+            return [
+                0,
+                data.get('value'),
+                f"Processed temperature reading: {data.get('value')} "
+                f"{data.get('unit')}\n"]
         elif isinstance(data, list) and \
                 all(isinstance(x, (int, float)) for x in data):
             print("Transform: Aggregated and filtered")
             avg = sum(data) / len(data)
-            return f"Stream summary: {len(data)} " \
-                f"readings, avg: {avg:.1f}°C\n"
+            return [1, [avg, len(data)], f"Stream summary: {len(data)} "
+                    f"readings, avg: {avg:.1f}°C\n"]
         elif isinstance(data, str):
             print("Transform: Parsed and structured data")
             parts = data.split(",")
@@ -32,12 +35,19 @@ class TransformStage:
             for part in parts:
                 if part == "action":
                     i += 1
-            return f"User activity logged: {i} actions processed\n"
+            return [
+                2, [i, len(parts)], f"User activity logged: {i} actions processed\n"]
 
 
 class OutputStage:
     def process(self, data: Any) -> Any:
-        print(f"Output: {data}")
+        print(f"Output: {data[2]}")
+        if data[0] == 0:
+            data = f"{data[1]}"
+        elif data[0] == 1:
+            data = [data[1][0], data[1][1]]
+        elif data[0] == 2:
+            data = data[1]
         return data
 
 
@@ -115,11 +125,10 @@ class NexusManager:
         self.pipelines.append(pipeline)
 
     def process_data(self, pipeline_id: str, data: Any) -> Any:
-        results = []
         for pipeline in self.pipelines:
             if pipeline.pipeline_id == pipeline_id:
-                results.append(pipeline.process(data))
-        return results
+                return pipeline.process(data)
+        return None
 
 
 def main() -> None:
@@ -149,6 +158,22 @@ def main() -> None:
             "sensor": "temp", "value": 23.5, "unit": "C"})
     manager.process_data("pipe_csv", "user,action,timestamp")
     manager.process_data("pipe_stream", [20, 15.2, 19.2, 17.7, 28.4])
+
+    print("\n=== NEXUS PIPELINE CHAINING DEMO ===\nPipeline A -> Pipeline B -> Pipeline C\n")
+
+    manager.process_data(
+        "pipe_stream",
+        manager.process_data(
+            "pipe_csv",
+            manager.process_data(
+                "pipe_json",
+                {
+                    "sensor": "temp", "value": 23.5, "unit": "C"})))
+
+    print("\n=== Error Recovery Test ===\n")
+    manager.process_data("pipe_json", "This is not a JSON dict")
+    manager.process_data("pipe_csv", {"not": "a string"})
+    manager.process_data("pipe_stream", "Not a list of numbers")
 
 
 if __name__ == "__main__":
