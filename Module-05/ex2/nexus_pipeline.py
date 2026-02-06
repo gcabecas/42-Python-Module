@@ -65,11 +65,14 @@ class JSONAdapter(ProcessingPipeline):
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
-        if not isinstance(data, dict):
-            print("Error: JSONAdapter expects a dict\n")
+        try:
+            if not isinstance(data, dict):
+                raise ValueError("JSONAdapter expects a dict\n")
+            print("Processing JSON data through pipeline...")
+            return self.run_stages(data)
+        except Exception as e:
+            print(f"Error processing JSON data: {e}")
             return data
-        print("Processing JSON data through pipeline...")
-        return self.run_stages(data)
 
 
 class CSVAdapter(ProcessingPipeline):
@@ -77,11 +80,14 @@ class CSVAdapter(ProcessingPipeline):
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
-        if not isinstance(data, str):
-            print("Error: CSVAdapter expects a string\n")
+        try:
+            if not isinstance(data, str):
+                raise ValueError("CSVAdapter expects a string\n")
+            print("Processing CSV data through pipeline...")
+            return self.run_stages(data)
+        except Exception as e:
+            print(f"Error processing CSV data: {e}")
             return data
-        print("Processing CSV data through pipeline...")
-        return self.run_stages(data)
 
 
 class StreamAdapter(ProcessingPipeline):
@@ -89,12 +95,15 @@ class StreamAdapter(ProcessingPipeline):
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> Union[str, Any]:
-        if not isinstance(data, list) or \
-                not all(isinstance(x, (int, float)) for x in data):
-            print("Error: StreamAdapter expects a list of numbers\n")
+        try:
+            if not isinstance(data, list) or \
+                    not all(isinstance(x, (int, float)) for x in data):
+                raise ValueError("StreamAdapter expects a list of numbers\n")
+            print("Processing Stream data through pipeline...")
+            return self.run_stages(data)
+        except Exception as e:
+            print(f"Error processing stream data: {e}")
             return data
-        print("Processing Stream data through pipeline...")
-        return self.run_stages(data)
 
 
 class NexusManager:
