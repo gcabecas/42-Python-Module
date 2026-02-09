@@ -6,6 +6,8 @@ from typing import Any
 class CardType(Enum):
     UNKNOWN = "Unknown"
     CREATURE = "Creature"
+    SPELL = "Spell"
+    ARTIFACT = "Artifact"
 
 
 class Rarity(Enum):
