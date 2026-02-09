@@ -25,15 +25,8 @@ def main() -> None:
     deck.add_card(artifact)
 
     stats = deck.get_deck_stats()
-    avg_cost = stats["average_cost"]
 
-    print(
-        f"Deck stats: {{'total_cards': {
-            stats['total_cards']}, 'creatures': {
-            stats['creatures']}, 'spells': {
-                stats['spells']},'artifacts': {
-                    stats['artifacts']}, 'avg_cost': {
-                        avg_cost:.1f}}}\n")
+    print(f"Deck stats: {stats}")
 
     deck.shuffle()
 

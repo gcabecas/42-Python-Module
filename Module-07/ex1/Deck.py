@@ -60,5 +60,5 @@ class Deck:
             "creatures": creatures,
             "spells": spells,
             "artifacts": artifacts,
-            "average_cost": cost_sum / total,
+            "average_cost": round(cost_sum / total, 2),
         }
