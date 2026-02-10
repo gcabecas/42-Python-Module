@@ -23,11 +23,14 @@ class CreatureCard(Card):
         self.card_type = CardType.CREATURE
 
     def play(self, game_state: dict[str, Any]) -> dict[str, Any]:
-        available = game_state.get("available_mana", self.cost)
+        available = game_state.get("available_mana")
+        if not isinstance(available, int):
+            raise ValueError("wrong game_state")
+
         if not self.is_playable(available):
             raise ValueError("not enough mana to play the card")
 
-        game_state["available_mana"] = game_state["available_mana"] - self.cost
+        game_state["available_mana"] = available - self.cost
         game_state["battlefield"].append(self.name)
 
         return {
