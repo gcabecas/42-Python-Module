@@ -36,6 +36,7 @@ ENV/
 
 # Text files
 *.txt
+!/Module-08/
 
 # IDEs
 .vscode/
@@ -64,3 +65,8 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+matrix_env/
+.venv/
+__pycache__/
+*.pyc
