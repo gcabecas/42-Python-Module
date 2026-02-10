@@ -36,7 +36,9 @@ ENV/
 
 # Text files
 *.txt
+/Module-08/
 !/Module-08/
+!/Module-08/**
 
 # IDEs
 .vscode/
