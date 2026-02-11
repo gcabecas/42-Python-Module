@@ -1,3 +1,4 @@
+import math
 import random
 
 from ex0.Card import Card, CardType
@@ -38,7 +39,7 @@ class Deck:
                 "creatures": 0,
                 "spells": 0,
                 "artifacts": 0,
-                "average_cost": 0.0,
+                "avg_cost": 0.0,
             }
 
         creatures = 0
@@ -60,5 +61,5 @@ class Deck:
             "creatures": creatures,
             "spells": spells,
             "artifacts": artifacts,
-            "average_cost": round(cost_sum / total, 2),
+            "avg_cost": float(math.ceil(cost_sum / total)),
         }

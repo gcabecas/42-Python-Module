@@ -54,9 +54,7 @@ class ArtifactCard(Card):
         game_state["artifacts"].append(self)
 
         return {
-            "played_card": self.name,
+            "card_played": self.name,
             "mana_used": self.cost,
             "effect": self.effect,
-            "durability": self.durability,
-            "in_play": True,
         }

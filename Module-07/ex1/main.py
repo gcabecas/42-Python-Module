@@ -10,7 +10,7 @@ def main() -> None:
 
     deck = Deck()
 
-    spell = SpellCard("Lightning Bolt", 3, "Rare", "damage")
+    spell = SpellCard("Lightning Bolt", 3, "Rare", "Deal 3 damage to target")
     artifact = ArtifactCard(
         "Mana Crystal",
         2,
@@ -19,17 +19,15 @@ def main() -> None:
         "Permanent: +1 mana per turn")
     creature = CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)
 
-    deck.add_card(creature)
     deck.add_card(spell)
     deck.add_card(artifact)
+    deck.add_card(creature)
 
     stats = deck.get_deck_stats()
 
     print(f"Deck stats: {stats}")
 
-    deck.shuffle()
-
-    print("Drawing and playing cards:\n")
+    print("\nDrawing and playing cards:\n")
 
     game_state = {
         "available_mana": 10,
