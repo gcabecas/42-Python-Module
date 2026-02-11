@@ -27,6 +27,16 @@ class TournamentCard(Card, Combatable, Rankable):
 
         self.wins: int = 0
         self.losses: int = 0
+        self.base_rating: int = self._initial_rating()
+
+    def _initial_rating(self) -> int:
+        rarity_map = {
+            "Legendary": 1200,
+            "Epic": 1250,
+            "Rare": 1150,
+            "Common": 1100,
+        }
+        return rarity_map.get(self.rarity.value, 1100)
 
     def play(self, game_state: dict[str, Any]) -> dict[str, Any]:
         available = game_state.get("available_mana")
@@ -85,7 +95,7 @@ class TournamentCard(Card, Combatable, Rankable):
         return {"attack_power": self.attack_power, "health": self.health}
 
     def calculate_rating(self) -> int:
-        return 1000 + (self.wins * 50) - (self.losses * 30)
+        return self.base_rating + (self.wins * 16) - (self.losses * 16)
 
     def update_wins(self, wins: int) -> None:
         if not isinstance(wins, int) or wins < 0:

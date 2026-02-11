@@ -32,10 +32,18 @@ class EliteCard(Card, Combatable, Magical):
     def play(self, game_state: dict[str, Any]) -> dict[str, Any]:
         available = game_state.get("available_mana")
         if not isinstance(available, int):
-            raise ValueError("wrong game_state")
+            return {
+                "error": "wrong game_state",
+                "card_played": self.name,
+                "mana_used": 0,
+            }
 
         if not self.is_playable(available):
-            raise ValueError("not enough mana to play the card")
+            return {
+                "error": "not enough mana to play the card",
+                "card_played": self.name,
+                "mana_used": 0,
+            }
 
         game_state["available_mana"] = available - self.cost
 
@@ -51,81 +59,97 @@ class EliteCard(Card, Combatable, Magical):
             "effect": "Elite card deployed",
         }
 
-    def attack(self, target: Card) -> dict[str, Any]:
+    def attack(self, target: Any) -> dict[str, Any]:
         damage = self.attack_power
-
-        target.health -= damage
+        target_name = getattr(target, "name", str(target))
+        if hasattr(target, "health"):
+            target.health -= damage
         return {
             "attacker": self.name,
-            "target": target.name,
-            "damage_dealt": damage,
-            "target_health": target.health,
+            "target": target_name,
+            "damage": damage,
+            "combat_type": "melee",
         }
 
     def defend(self, incoming_damage: int) -> dict[str, Any]:
         if not isinstance(incoming_damage, int) or incoming_damage < 0:
-            raise ValueError("wrong incoming_damage")
+            return {
+                "defender": self.name,
+                "damage_taken": 0,
+                "damage_blocked": 0,
+                "still_alive": True,
+            }
 
-        self.health = max(0, self.health - incoming_damage)
+        defense = max(1, self.attack_power // 2 + 1)
+        blocked = min(incoming_damage, defense)
+        damage_taken = incoming_damage - blocked
+        self.health = max(0, self.health - damage_taken)
 
         return {
             "defender": self.name,
-            "damage_taken": incoming_damage,
-            "health_left": self.health,
-            "defeated": self.health == 0,
+            "damage_taken": damage_taken,
+            "damage_blocked": blocked,
+            "still_alive": self.health > 0,
         }
 
     def get_combat_stats(self) -> dict[str, Any]:
         return {
-            "attack_power": self.attack_power,
+            "attack": self.attack_power,
             "health": self.health,
         }
 
     def channel_mana(self, amount: int) -> dict[str, Any]:
         if not isinstance(amount, int) or amount <= 0:
-            raise ValueError("wrong amount")
+            return {
+                "channeled": 0,
+                "total_mana": self.mana_pool,
+            }
 
         self.mana_pool += amount
 
         return {
-            "card": self.name,
             "channeled": amount,
-            "mana_pool": self.mana_pool,
+            "total_mana": self.mana_pool,
         }
 
-    def cast_spell(self, spell_name: str, targets: Card |
-                   list[Card]) -> dict[str, Any]:
+    def cast_spell(self, spell_name: str,
+                   targets: list[Any]) -> dict[str, Any]:
         if not isinstance(spell_name, str) or spell_name == "":
-            raise ValueError("wrong spell_name")
-
-        if isinstance(targets, list):
-            target_list = targets
-        else:
-            target_list = [targets]
-
-        if self.mana_pool < 1:
             return {
                 "caster": self.name,
                 "spell": spell_name,
-                "success": False,
-                "reason": "no mana",
+                "targets": [],
+                "mana_used": 0,
             }
 
-        self.mana_pool -= 1
+        if not isinstance(targets, list):
+            target_list = [targets]
+        else:
+            target_list = targets
 
-        names: list[str] = []
-        for t in target_list:
-            names.append(getattr(t, "name", "unknown"))
+        mana_cost = max(1, len(target_list) * 2)
+        if self.mana_pool < mana_cost:
+            return {
+                "caster": self.name,
+                "spell": spell_name,
+                "targets": [
+                    t if isinstance(t, str) else getattr(t, "name", "unknown")
+                    for t in target_list],
+                "mana_used": 0,
+            }
+
+        self.mana_pool -= mana_cost
 
         return {
             "caster": self.name,
             "spell": spell_name,
-            "targets": names,
-            "mana_left": self.mana_pool,
-            "success": True,
+            "targets": [
+                t if isinstance(t, str) else getattr(t, "name", "unknown")
+                for t in target_list],
+            "mana_used": mana_cost,
         }
 
     def get_magic_stats(self) -> dict[str, Any]:
         return {
-            "mana_pool": self.mana_pool,
+            "mana": self.mana_pool,
         }

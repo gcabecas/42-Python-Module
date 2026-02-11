@@ -12,6 +12,7 @@ def _format_hand(hand: list) -> str:
 
 def main() -> None:
     print("=== DataDeck Game Engine ===\n")
+    print("Configuring Fantasy Card Game...")
 
     factory = FantasyCardFactory()
     strategy = AggressiveStrategy()
@@ -21,18 +22,20 @@ def main() -> None:
 
     print(f"Factory: {factory.__class__.__name__}")
     print(f"Strategy: {strategy.get_strategy_name()}")
-    print(f"Supported types: {factory.get_supported_types()}")
+    print(f"Available types: {factory.get_supported_types()}")
 
     print("\nSimulating aggressive turn...")
     print(f"Hand: {_format_hand(engine.hand)}")
 
     result = engine.simulate_turn()
 
-    print("\nTurn execution:")
+    print("Turn execution:")
+    print(f"Strategy: {strategy.get_strategy_name()}")
     print(f"Actions: {result['actions']}")
 
     status = engine.get_engine_status()
-    print(f"\nGame Report: {status}")
+    print("\nGame Report:")
+    print(status)
 
     print("\nAbstract Factory + Strategy Pattern: "
           "Maximum flexibility achieved!")

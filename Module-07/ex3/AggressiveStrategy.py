@@ -6,7 +6,7 @@ from ex3.GameStrategy import GameStrategy
 
 class AggressiveStrategy(GameStrategy):
     def get_strategy_name(self) -> str:
-        return "Aggressive"
+        return "AggressiveStrategy"
 
     def prioritize_targets(self, available_targets: list[Any]) -> list[Any]:
         creatures = [t for t in available_targets if not isinstance(t, str)]
@@ -25,25 +25,28 @@ class AggressiveStrategy(GameStrategy):
 
         play_order = creatures + others
 
+        mana_pool = 5
+        mana_used = 0
         played_cards: list[str] = []
-        attacks: list[dict[str, Any]] = []
+        damage_dealt = 0
 
         for c in play_order:
+            if mana_used + c.cost > mana_pool:
+                continue
             played_cards.append(c.name)
+            mana_used += c.cost
             if c.card_type == CardType.CREATURE:
                 battlefield.append(c)
+                damage_dealt += getattr(c, "attack", 0)
+            elif c.card_type == CardType.SPELL:
+                damage_dealt += 3
 
         target = targets[0] if len(targets) > 0 else "Enemy Player"
         target_name = target if isinstance(target, str) else target.name
 
-        for c in battlefield:
-            if c.card_type == CardType.CREATURE:
-                dmg = getattr(c, "attack", 0)
-                attacks.append(
-                    {"attacker": c.name, "target": target_name, "damage": dmg})
-
         return {
-            "strategy": self.get_strategy_name(),
-            "played_cards": played_cards,
-            "attacks": attacks,
+            "cards_played": played_cards,
+            "mana_used": mana_used,
+            "targets_attacked": [target_name],
+            "damage_dealt": damage_dealt,
         }

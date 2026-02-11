@@ -13,6 +13,8 @@ class GameEngine:
         self.battlefield: list = []
 
         self.turns_simulated: int = 0
+        self.cards_created: int = 0
+        self.total_damage: int = 0
 
     def configure_engine(
             self,
@@ -24,6 +26,7 @@ class GameEngine:
         themed = factory.create_themed_deck(3)
         self.hand = themed.get("hand", [])
         self.battlefield = themed.get("battlefield", [])
+        self.cards_created = len(self.hand)
 
     def simulate_turn(self) -> dict[str, Any]:
         if self.factory is None or self.strategy is None:
@@ -33,6 +36,7 @@ class GameEngine:
 
         actions = self.strategy.execute_turn(self.hand, self.battlefield)
         self.turns_simulated += 1
+        self.total_damage += actions.get("damage_dealt", 0)
 
         return {
             "actions": actions,
@@ -41,11 +45,10 @@ class GameEngine:
 
     def get_engine_status(self) -> dict[str, Any]:
         return {
-            "configured": self.factory is not None and self.strategy
-            is not None,
             "turns_simulated": self.turns_simulated,
-            "hand_size": len(
-                self.hand),
-            "battlefield_size": len(
-                self.battlefield),
+            "strategy_used": (
+                self.strategy.get_strategy_name()
+                if self.strategy is not None else "None"),
+            "total_damage": self.total_damage,
+            "cards_created": self.cards_created,
         }
