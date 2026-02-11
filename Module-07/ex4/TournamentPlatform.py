@@ -1,4 +1,3 @@
-# ex4/TournamentPlatform.py
 from typing import Any
 
 from ex4.TournamentCard import TournamentCard

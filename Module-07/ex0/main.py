@@ -2,7 +2,8 @@ from ex0.CreatureCard import CreatureCard
 
 
 def main() -> None:
-    print("=== DataDeck Card Foundation ===")
+    print("=== DataDeck Card Foundation ===\n")
+    print("Testing Abstract Base Class Design:\n")
 
     try:
         dragon = CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)
@@ -11,7 +12,7 @@ def main() -> None:
         print(f"Error creating card: {e}")
         return
 
-    print("\nCard Info:")
+    print("CreatureCard Info:")
     print(dragon.get_card_info())
 
     game_state = {
@@ -19,23 +20,22 @@ def main() -> None:
         "battlefield": []
     }
 
-    print("\nChecking if card is playable with 6 mana:")
-    print(dragon.is_playable(game_state["available_mana"]))
+    print("\nPlaying Fire Dragon with 6 mana available:")
+    print("Playable:", dragon.is_playable(game_state["available_mana"]))
 
-    print("\nPlaying card:")
     result = dragon.play(game_state)
-    print(result)
+    print("Play result:", result)
 
     goblin.play(game_state)
 
-    print("\nAttacking target:")
+    print("\nFire Dragon attacks Goblin Warrior:")
     attack = dragon.attack_target(goblin)
-    print(attack)
+    print("Attack result:", attack)
 
-    print("\nChecking if card is playable with 3 mana:")
-    print(dragon.is_playable(3))
+    print("\nTesting insufficient mana (3 available):")
+    print("Playable:", dragon.is_playable(3))
 
-    print("\nAbstract pattern successfully demonstrated!")
+    print("Abstract pattern successfully demonstrated!")
 
 
 if __name__ == "__main__":

@@ -30,20 +30,26 @@ class CreatureCard(Card):
         if not self.is_playable(available):
             raise ValueError("not enough mana to play the card")
 
+        battlefield = game_state.setdefault("battlefield", [])
+        if not isinstance(battlefield, list):
+            raise ValueError("wrong game_state")
+
         game_state["available_mana"] = available - self.cost
-        game_state["battlefield"].append(self.name)
+        battlefield.append(self.name)
 
         return {
-            'attacker': self.name,
-            'mana_used': self.cost,
-            'effect': "Creature summoned to battlefield"
+            "card_played": self.name,
+            "mana_used": self.cost,
+            "effect": "Creature summoned to battlefield"
         }
 
-    def attack_target(self, target: Card) -> dict[str, Any]:
-        target.health -= self.attack
+    def attack_target(self, target: Any) -> dict[str, Any]:
+        target_name = getattr(target, "name", str(target))
+        if hasattr(target, "health"):
+            target.health -= self.attack
         return {
             "attacker": self.name,
-            "target": target.name,
+            "target": target_name,
             "damage_dealt": self.attack,
             'combat_resolved': True
         }

@@ -1,4 +1,3 @@
-# ex2/EliteCard.py
 from typing import Any
 
 from ex0.Card import Card, CardType

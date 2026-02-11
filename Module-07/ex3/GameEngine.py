@@ -29,7 +29,6 @@ class GameEngine:
         if self.factory is None or self.strategy is None:
             raise ValueError("engine not configured")
 
-        # let strategy know possible targets (simple)
         self.strategy.available_targets = ["Enemy Player"]
 
         actions = self.strategy.execute_turn(self.hand, self.battlefield)

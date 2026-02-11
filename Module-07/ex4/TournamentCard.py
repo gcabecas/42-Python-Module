@@ -1,4 +1,3 @@
-# ex4/TournamentCard.py
 from typing import Any
 
 from ex0.Card import Card, CardType
