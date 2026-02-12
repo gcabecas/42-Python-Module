@@ -54,3 +54,14 @@ class SpaceMission(BaseModel):
             raise ValueError('All crew members must be active')
 
         return self
+
+
+def main() -> None:
+    try:
+        pass
+    except ValidationError as e:
+        print("Validation error:", e)
+
+
+if __name__ == "__main__":
+    main()
