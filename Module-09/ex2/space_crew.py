@@ -7,7 +7,7 @@ class Rank(Enum):
     CADET = "cadet"
     OFFICER = "officer"
     LIEUTENANT = "lieutenant"
-    CAPITAIN = "captain"
+    CAPTAIN = "captain"
     COMMANDER = "commander"
 
 
@@ -37,7 +37,7 @@ class SpaceMission(BaseModel):
             raise ValueError('Mission ID must start with "M"')
         has_leadership = any(
             member.rank in [
-                Rank.CAPITAIN,
+                Rank.CAPTAIN,
                 Rank.COMMANDER] for member in self.crew)
         if not has_leadership:
             raise ValueError(
@@ -54,6 +54,25 @@ class SpaceMission(BaseModel):
             raise ValueError('All crew members must be active')
 
         return self
+
+
+def display_mission(mission: SpaceMission) -> None:
+    print("Valid mission created:")
+    print(f"Mission: {mission.mission_name}")
+    print(f"ID: {mission.mission_id}")
+    print(f"Destination: {mission.destination}")
+    print(f"Duration: {mission.duration_days} days")
+    print(f"Budget: ${mission.budget_millions}M")
+    print(f"Crew size: {len(mission.crew)}")
+    print("Crew members:")
+
+    for member in mission.crew:
+        print(
+            f"- {member.name} ({member.rank.value}) "
+            f"- {member.specialization}"
+        )
+
+    print()
 
 
 def main() -> None:
