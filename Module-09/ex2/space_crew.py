@@ -27,7 +27,7 @@ class SpaceMission(BaseModel):
     destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime
     duration_days: int = Field(ge=1, le=3650)
-    crew: list[CrewMember] = Field(min_items=1, max_items=12)
+    crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = "planned"
     budget_millions: float = Field(ge=1.0, le=10000.0)
 
@@ -76,8 +76,113 @@ def display_mission(mission: SpaceMission) -> None:
 
 
 def main() -> None:
+    SPACE_MISSIONS = [
+        {
+            'mission_id': 'M2024_TITAN',
+            'mission_name': 'Solar Observatory Research Mission',
+            'destination': 'Solar Observatory',
+            'launch_date': '2024-03-30T00:00:00',
+            'duration_days': 451,
+            'crew': [
+                {
+                    'member_id': 'CM001',
+                    'name': 'Sarah Williams',
+                    'rank': 'captain',
+                    'age': 43,
+                    'specialization': 'Mission Command',
+                    'years_experience': 19,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM002',
+                    'name': 'James Hernandez',
+                    'rank': 'captain',
+                    'age': 43,
+                    'specialization': 'Pilot',
+                    'years_experience': 30,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM003',
+                    'name': 'Anna Jones',
+                    'rank': 'cadet',
+                    'age': 35,
+                    'specialization': 'Communications',
+                    'years_experience': 15,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM004',
+                    'name': 'David Smith',
+                    'rank': 'commander',
+                    'age': 27,
+                    'specialization': 'Security',
+                    'years_experience': 15,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM005',
+                    'name': 'Maria Jones',
+                    'rank': 'cadet',
+                    'age': 55,
+                    'specialization': 'Research',
+                    'years_experience': 30,
+                    'is_active': True
+                }
+            ],
+            'mission_status': 'planned',
+            'budget_millions': 2208.1
+        }, {
+            'mission_id': 'M2024_MARS',
+            'mission_name': 'Jupiter Orbit Colony Mission',
+            'destination': 'Jupiter Orbit',
+            'launch_date': '2024-10-01T00:00:00',
+            'duration_days': 1065,
+            'crew': [
+                {
+                    'member_id': 'CM011',
+                    'name': 'Emma Brown',
+                    'rank': 'cadet',
+                    'age': 49,
+                    'specialization': 'Mission Command',
+                    'years_experience': 27,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM012',
+                    'name': 'John Hernandez',
+                    'rank': 'cadet',
+                    'age': 36,
+                    'specialization': 'Science Officer',
+                    'years_experience': 22,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM013',
+                    'name': 'Sofia Rodriguez',
+                    'rank': 'cadet',
+                    'age': 29,
+                    'specialization': 'Life Support',
+                    'years_experience': 20,
+                    'is_active': True
+                },
+                {
+                    'member_id': 'CM014',
+                    'name': 'Sofia Lopez',
+                    'rank': 'cadet',
+                    'age': 44,
+                    'specialization': 'Systems Analysis',
+                    'years_experience': 25,
+                    'is_active': True
+                }
+            ],
+            'mission_status': 'planned',
+            'budget_millions': 4626.0
+        }]
     try:
-        pass
+        for mission_data in SPACE_MISSIONS:
+            mission = SpaceMission(**mission_data)
+            display_mission(mission)
     except ValidationError as e:
         print("Validation error:", e)
 
