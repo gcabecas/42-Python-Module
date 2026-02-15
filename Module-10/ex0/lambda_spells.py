@@ -14,7 +14,7 @@ def power_filter(mages: list[dict], min_power: int) -> list[dict]:
 
 def spell_transformer(spells: list[str]) -> list[str]:
     try:
-        return list(map(lambda s: f"* {s} *", spells))
+        return [f"* {s} *" for s in spells]
     except TypeError:
         return []
 
@@ -26,7 +26,7 @@ def mage_stats(mages: list[dict]) -> dict:
     try:
         max_p = max(mages, key=lambda m: m.get("power", 0)).get("power", 0)
         min_p = min(mages, key=lambda m: m.get("power", 0)).get("power", 0)
-        total = sum(map(lambda m: m.get("power", 0), mages))
+        total = sum(m.get("power", 0) for m in mages)
         avg = round(total / len(mages), 2)
         return {"max_power": max_p, "min_power": min_p, "avg_power": avg}
     except (TypeError, AttributeError, ZeroDivisionError):
