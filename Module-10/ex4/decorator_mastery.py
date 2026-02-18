@@ -1,49 +1,41 @@
 from __future__ import annotations
-
+from typing import Any
 from functools import wraps
 from time import perf_counter, sleep
 
 
 def spell_timer(func: callable) -> callable:
     @wraps(func)
-    def wrapper(*args, **kwargs):
-        print(f"Casting {func.__name__}...")
+    def time_calc(*args: Any, **kwargs: Any) -> Any:
         start = perf_counter()
         result = func(*args, **kwargs)
         end = perf_counter()
-        print(f"Spell completed in {end - start:.3f} seconds")
+        print(f"{func.__name__} took {end - start:.3f}s")
         return result
 
-    return wrapper
+    return time_calc
 
 
-def power_validator(min_power: int) -> callable:
-    def decorator(func: callable) -> callable:
+def power_validator(min_power: int):
+    def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            power = None
-            if args:
-                if isinstance(args[0], int):
-                    power = args[0]
-                elif len(args) > 1 and isinstance(args[1], int):
-                    power = args[1]
-
-            if power is None:
-                power = kwargs.get("power")
+        def validate_power(*args: Any, **kwargs: Any) -> Any:
+            power = kwargs.get("power")
+            if power is None and len(args) == 3 and isinstance(args[2], int):
+                power = args[2]
 
             if isinstance(power, int) and power >= min_power:
                 return func(*args, **kwargs)
             return "Insufficient power for this spell"
 
-        return wrapper
-
+        return validate_power
     return decorator
 
 
 def retry_spell(max_attempts: int) -> callable:
     def decorator(func: callable) -> callable:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             attempt = 1
             while attempt <= max_attempts:
                 try:
