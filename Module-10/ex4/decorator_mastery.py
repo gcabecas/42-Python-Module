@@ -6,7 +6,7 @@ from time import perf_counter, sleep
 
 def spell_timer(func: callable) -> callable:
     @wraps(func)
-    def time_calc(*args: Any, **kwargs: Any) -> Any:
+    def time_calc(*args: tuple, **kwargs: dict) -> Any:
         start = perf_counter()
         result = func(*args, **kwargs)
         end = perf_counter()
@@ -19,7 +19,7 @@ def spell_timer(func: callable) -> callable:
 def power_validator(min_power: int):
     def decorator(func):
         @wraps(func)
-        def validate_power(*args: Any, **kwargs: Any) -> Any:
+        def validate_power(*args: tuple, **kwargs: dict) -> Any:
             power = kwargs.get("power")
             if power is None and len(args) == 3 and isinstance(args[2], int):
                 power = args[2]
@@ -35,7 +35,7 @@ def power_validator(min_power: int):
 def retry_spell(max_attempts: int) -> callable:
     def decorator(func: callable) -> callable:
         @wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
+        def wrapper(*args: tuple, **kwargs: dict) -> Any:
             attempt = 1
             while attempt <= max_attempts:
                 try:
